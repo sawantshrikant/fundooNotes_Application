@@ -11,10 +11,31 @@ export const userRegistration = async(req,res) => {
     })
     
   } catch (error) {
-    
     res.status(HttpStatus.BAD_REQUEST).json({
       code : HttpStatus.BAD_REQUEST,
       message : error.message
     })
   }
+}
+
+export const userLogin = async(req,res) => {
+  
+  try {
+    const data = await userService.userLogin(req.body);
+    res.status(HttpStatus.ACCEPTED).json({
+      code : HttpStatus.ACCEPTED,
+      data : data,
+      message : "User Login sucessful"
+    })
+    
+  } catch (error) {
+    res.status(HttpStatus.BAD_REQUEST).json({
+      code : HttpStatus.BAD_REQUEST,
+      message : error.message
+    })
+
+    
+  }
+
+  
 }

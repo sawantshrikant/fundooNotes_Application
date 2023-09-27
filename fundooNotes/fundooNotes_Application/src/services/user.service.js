@@ -13,3 +13,14 @@ export const userRegistration = async(body) => {
 
    return data;
 }
+
+export const userLogin = async(body) => {
+  const checkForUserCredentials = await User.findOne({email: body.email,password: body.password});
+  var data;
+  if(checkForUserCredentials == null){
+    throw new Error("User not registered")
+  }else{
+    data = body.email;
+  }
+  return data;
+}
