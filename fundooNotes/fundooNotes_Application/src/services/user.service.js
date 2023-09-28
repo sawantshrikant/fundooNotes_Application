@@ -1,39 +1,26 @@
-import User from '../models/user.model';
+import { error } from 'winston';
+import User from '../models/user.model'
+import HttpStatus from 'http-status-codes';
 
-//get all users
-export const getAllUsers = async () => {
-  const data = await User.find();
+export const userRegistration = async(body) => {
+   const checkForExistingUser = await User.findOne({email: body.email});
+   var data;
+   if(checkForExistingUser != null){
+    throw new Error("Email is already registered.")
+   }else{
+    data = await User.create(body);
+   }
+
+   return data;
+}
+
+export const userLogin = async(body) => {
+  const checkForUserCredentials = await User.findOne({email: body.email,password: body.password});
+  var data;
+  if(checkForUserCredentials == null){
+    throw new Error("User not registered")
+  }else{
+    data = body.email;
+  }
   return data;
-};
-
-//create new user
-export const newUser = async (body) => {
-  const data = await User.create(body);
-  return data;
-};
-
-//update single user
-export const updateUser = async (_id, body) => {
-  const data = await User.findByIdAndUpdate(
-    {
-      _id
-    },
-    body,
-    {
-      new: true
-    }
-  );
-  return data;
-};
-
-//delete single user
-export const deleteUser = async (id) => {
-  await User.findByIdAndDelete(id);
-  return '';
-};
-
-//get single user
-export const getUser = async (id) => {
-  const data = await User.findById(id);
-  return data;
-};
+}
