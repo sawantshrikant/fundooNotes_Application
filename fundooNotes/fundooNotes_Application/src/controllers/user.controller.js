@@ -33,9 +33,5 @@ export const userLogin = async(req,res) => {
       code : HttpStatus.BAD_REQUEST,
       message : error.message
     })
-
-    
   }
-
-  
 }
