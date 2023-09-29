@@ -1,6 +1,8 @@
 import { error } from 'winston';
+
 import User from '../models/user.model'
 import HttpStatus from 'http-status-codes';
+import bcrypt from "bcrypt";
 
 export const userRegistration = async(body) => {
    const checkForExistingUser = await User.findOne({email: body.email});
@@ -8,7 +10,17 @@ export const userRegistration = async(body) => {
    if(checkForExistingUser != null){
     throw new Error("Email is already registered.")
    }else{
+    const saltRound = 10;
+    const hashedPassword = await bcrypt.hash(body.password,saltRound);
+
+    body.password = hashedPassword;
+
     data = await User.create(body);
+
+    data = {
+      firstName: data.firstName,
+      email: data.email
+    }
    }
 
    return data;
@@ -20,7 +32,11 @@ export const userLogin = async(body) => {
   if(checkForUserCredentials == null){
     throw new Error("User not registered")
   }else{
-    data = body.email;
+    data = {
+      firstName: checkForUserCredentials.firstName,
+      email: checkForUserCredentials.email,
+    }
   }
   return data;
 }
+
