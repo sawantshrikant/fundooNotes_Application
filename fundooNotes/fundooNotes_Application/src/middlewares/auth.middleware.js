@@ -1,5 +1,6 @@
 import HttpStatus from 'http-status-codes';
 import jwt from 'jsonwebtoken';
+import { verifyToken } from '../utils/user.util';
 
 /**
  * Middleware to authenticate if user has a valid Authorization token
