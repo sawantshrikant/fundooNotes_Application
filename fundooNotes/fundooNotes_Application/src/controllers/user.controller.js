@@ -59,22 +59,22 @@ export const forgotPassword = async (req,res) => {
   }
 }
 
-  //  export const resetPassword = async (req,res) => {
-  //   try {
-  //     const {email,resetToken, newPassword} = req.body;
-  //     const data  = await userService.resetPassword(email,resetToken,newPassword);
-  //     res.status(HttpStatus.ACCEPTED).json({
-  //       code : HttpStatus.ACCEPTED,
-  //       message : 'Password reset sucessful'
-  //     })
-  //   } catch (error) {
-  //     res.status(HttpStatus.BAD_REQUEST).json({
-  //         code : HttpStatus.BAD_REQUEST,
-  //         message : error.message,
-  //     })
+   export const resetPassword = async (req,res) => {
+    try {
+      const {email,resetToken, newPassword} = req.body;
+      const data  = await userService.resetPassword(email,resetToken,newPassword);
+      res.status(HttpStatus.ACCEPTED).json({
+        code : HttpStatus.ACCEPTED,
+        message : 'Password reset sucessful'
+      })
+    } catch (error) {
+      res.status(HttpStatus.BAD_REQUEST).json({
+          code : HttpStatus.BAD_REQUEST,
+          message : error.message,
+      })
       
-  //   }
-  //  }
+    }
+   }
 
 
 

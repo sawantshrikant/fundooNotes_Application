@@ -94,26 +94,26 @@ export const forgotPassword = async (email) => {
   return resetToken;
 };
 
-// export const resetPassword = async (email,resetToken,newPassword) => {
-//   try {
-//     const CheckForToken = jwt.verify(resetToken,process.env.Secret_Key)
-//     const user = await User.findOne({email : CheckForToken.email})
+export const resetPassword = async (email,resetToken,newPassword) => {
+  try {
+    const CheckForToken = jwt.verify(resetToken,process.env.Secret_Key)
+    const user = await User.findOne({email : CheckForToken.email})
 
-//     if (!user) {
-//       throw new Error('User not found')
-//     }
+    if (!user) {
+      throw new Error('User not found')
+    }
 
-//     const saltRound = 10;
-//     const hashedPassword = await bcrypt.hash(newPassword,saltRound)
+    const saltRound = 10;
+    const hashedPassword = await bcrypt.hash(newPassword,saltRound)
 
-//     user.password = hashedPassword
-//     const data = await user.save();
+    user.password = hashedPassword
+    const data = await user.save();
 
-//     return data
+    return data
 
-//   } catch (error) {
-//     throw error;
+  } catch (error) {
+    throw error;
     
-//   }
-// }
+  }
+}
 
