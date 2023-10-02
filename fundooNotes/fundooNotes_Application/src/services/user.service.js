@@ -1,6 +1,9 @@
+
+
 import User from '../models/user.model';
 import bcrypt from 'bcrypt';
-var jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
+const nodemailer = require('nodemailer');
 
 export const userRegistration = async (body) => {
   const checkForExistingUser = await User.findOne({ email: body.email });
@@ -15,15 +18,9 @@ export const userRegistration = async (body) => {
 
     data = await User.create(body);
 
-    //const {firstName , email} = data;
     const { email, firstName } = data;
 
     data = { email, firstName };
-
-    // data = {
-    //   firstName: data.firstName,
-    //   email: data.email
-    // }
   }
 
   return data;
@@ -54,30 +51,69 @@ export const userLogin = async (body) => {
   return data;
 };
 
-// export const storeResetToken = async (email,resetToken) => {
-//   const user = await User.findOne({email});
-//   if(user) {
-//     user.resetToken = resetToken;
-//     user.resetTokenExpires = new Date(Date.now() + 3600000)
-//     await user.save()
-//   } else{
-//     throw new Error('User Not Found')
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'amit40fakeemail@gmail.com',
+    pass: 'dyezqtoboczpzppj',
+  },
+});
+
+const sendEmail = async (email, text) => {
+  const mailOptions = {
+    from: 'amit40fakeemail@gmail.com', 
+    to: email, 
+    subject: 'Reset Password Token', 
+    text: text, // Email content
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log('Email sent successfully');
+  } catch (error) {
+    console.error('Error sending email:', error);
+    throw error;
+  }
+};
+
+export const forgotPassword = async (email) => {
+  let resetToken;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      throw new Error('User Not Exist');
+    }
+
+     resetToken = jwt.sign({ email }, process.env.Secret_Key);
+
+
+    await sendEmail(email, `Your reset password token: ${resetToken}`);
+  } catch (error) {
+    throw error;
+  }
+  return resetToken;
+};
+
+// export const resetPassword = async (email,resetToken,newPassword) => {
+//   try {
+//     const CheckForToken = jwt.verify(resetToken,process.env.Secret_Key)
+//     const user = await User.findOne({email : CheckForToken.email})
+
+//     if (!user) {
+//       throw new Error('User not found')
+//     }
+
+//     const saltRound = 10;
+//     const hashedPassword = await bcrypt.hash(newPassword,saltRound)
+
+//     user.password = hashedPassword
+//     const data = await user.save();
+
+//     return data
+
+//   } catch (error) {
+//     throw error;
+    
 //   }
 // }
 
-// export const resetUserPassword = async (email,resetToken,newPassword) => {
-//   const user = await User.findOne({
-//     email,
-//     resetToken,
-//     resetTokenExpires: {$gt : Date.now() },
-//   })
-
-//   if (user) {
-//     user.password = newPassword
-//     user.resetToken = undefined
-//     user.resetTokenExpires = undefined
-//     await user.save
-//   }else {
-//     throw new Error('Invalid or expired token')
-//   }
-// };
