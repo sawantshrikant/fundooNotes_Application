@@ -1,5 +1,3 @@
-
-
 import User from '../models/user.model';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
@@ -59,11 +57,11 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const sendEmail = async (email, text) => {
+export const sendEmail = async (email, text) => {
   const mailOptions = {
-    from: 'amit40fakeemail@gmail.com', 
-    to: email, 
-    subject: 'Reset Password Token', 
+    from: 'amit40fakeemail@gmail.com',
+    to: email,
+    subject: 'Reset Password Token',
     text: text, // Email content
   };
 
@@ -84,8 +82,7 @@ export const forgotPassword = async (email) => {
       throw new Error('User Not Exist');
     }
 
-     resetToken = jwt.sign({ email }, process.env.Secret_Key);
-
+    resetToken = jwt.sign({ email }, process.env.Secret_KeyForForgot);
 
     await sendEmail(email, `Your reset password token: ${resetToken}`);
   } catch (error) {
@@ -94,26 +91,23 @@ export const forgotPassword = async (email) => {
   return resetToken;
 };
 
-export const resetPassword = async (email,resetToken,newPassword) => {
+export const resetPassword = async (email,newPassword) => {
   try {
-    const CheckForToken = jwt.verify(resetToken,process.env.Secret_Key)
-    const user = await User.findOne({email : CheckForToken.email})
+    
+    const user = await User.findOne({ email: email });
 
     if (!user) {
-      throw new Error('User not found')
+      throw new Error('User not found');
     }
 
     const saltRound = 10;
-    const hashedPassword = await bcrypt.hash(newPassword,saltRound)
+    const hashedPassword = await bcrypt.hash(newPassword, saltRound);
 
-    user.password = hashedPassword
+    user.password = hashedPassword;
     const data = await user.save();
 
-    return data
-
+    return data.email;
   } catch (error) {
     throw error;
-    
   }
-}
-
+};
