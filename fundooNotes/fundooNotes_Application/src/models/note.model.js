@@ -12,6 +12,9 @@ const noteSchema = new  Schema ( {
         type : String
     }
 
+},
+{
+    timestamps: true
 })
 
 const Note = model('Note', noteSchema)

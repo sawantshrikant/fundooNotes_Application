@@ -19,7 +19,7 @@
     "paths": {
       "/users": {
         "post": {
-          "tags": ["Users Part"],
+          "tags": ["User port"],
           "description": "create profile using user Details",
           "parameters": [
             {
@@ -44,10 +44,127 @@
             }
           }
         }
-      }
+      },
+      "/users/login" : {
+        "post": {
+            "tags" :["User port"],
+            "description": "login using email",
+            "parameters" :[
+                {
+                   "name": "login existing user",
+                   "in":"body",
+                   "schema" :{
+                    "$ref" :"#/definitions/login"
+                   }
+                }
+            ],
+            "produces":["application/json"],
+            "responses" :{
+                "202":{
+                    "description": "User Login successful"
+                },
+                "400":{
+                    "description": "Bad Request"
+                }
+                
+           
+            }
+        }
 
+      },
+      "/users/forgotPassword" : {
+        "post":{
+            "tags":["User port"],
+            "description": " forgot Password - use email to receive link",
+            "parameters" :[
+                {
+                    "name" : "Forgot Password",
+                    "in" :"body",
+                    "schema" :{
+                        "$ref":"#/definitions/forgotPassword"
+                    }
+                }
+            ],
+            "produces":["application/json"],
+            "responses":{
+                "202" : {
+                    "description" : "Email send sucessful"
+                },
+                "400" :{
+                    "description" : "Bad Request"
+                }
+            }
+        }
+      },
+      "/users/resetPassword" : {
+        "post" :{
+            "tags":["User port"],
+            "description": "Reset Password",
+            "parameters" :[
+                {
+                    "name" : "reset password",
+                    "in" : "body",
+                    "schema" :{
+                        "$ref":"#/definitions/resetPassword"
+                    }
+                }
+            ],
+            "produces":["application/json"],
+            "responses":{
+                "202" :{
+                    "description" : "Password reset sucessful"
+                },
+                "400" :{
+                    "description":"Bad Request"
+                }
+            },
+              "security": [
+                {
+                    "BearerAuth":{
+                        "$ref":"#/securityDefinitions"
+                    }
+                }
 
-    },
+              ]
+            
+            
+        }
+      },
+      "/note" : {
+        "post" :{
+            "tags" :["Note Api"],
+            "description" : "Create Note",
+            "parameters":[
+                {
+                    "name" : "Create custom Note",
+                    "in" : "body",
+                    "description": "Create",
+                    "schema":{
+                        "$ref":"#/definitions/createNote"
+                    }
+
+                }
+            ],
+            "produces":["application/json"],
+            "responses":{
+                "201":{
+                    "description": "new Note Created"
+                },
+                "400":{
+                    "description":"Bad Request"
+                }
+            },
+            "security": [
+                {
+                  "BearerAuth": {
+                    "$ref": "#/securityDefinitions"
+                  }
+                }
+              ]
+            }
+        }
+
+      },
     "definitions": {
       "User": {
         "type": "object",
@@ -64,6 +181,49 @@
           "password": {
             "type": "string"
           }
+        }
+      },
+
+      "login": {
+        "type" :"object",
+        "properties":{
+            "email" :{
+                "type":"string"
+            },
+            "password":{
+                "type":"string"
+            }
+        }
+      },
+      "forgotPassword" : {
+        "type" : "object",
+        "properties":{
+            "email" :{
+                "type":"string"
+            }
+        }
+      },
+      "resetPassword" : {
+         "type" :"object",
+         "properties" :{
+            "email":{
+                "type":"string"
+            },
+            "newPassword":{
+                "type" : "string"
+            }
+            
+         }
+      },
+      "createNote" : {
+        "type" :"object",
+        "properties":{
+            "name": {
+                "type" : "string"
+            },
+            "description" : {
+                "type" :"string"
+            }
         }
       }
     },

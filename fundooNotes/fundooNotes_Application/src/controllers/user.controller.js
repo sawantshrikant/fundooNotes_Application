@@ -53,8 +53,8 @@ export const forgotPassword = async (req, res) => {
 
 export const resetPassword = async (req, res) => {
   try {
-    const { newPassword } = req.body; // from the request body
-    const { email } = res.locals; // email from res.locals
+    const { newPassword,email } = req.body; // from the request body
+  
 
     const data = await userService.resetPassword(email, newPassword);
     res.status(HttpStatus.ACCEPTED).json({
