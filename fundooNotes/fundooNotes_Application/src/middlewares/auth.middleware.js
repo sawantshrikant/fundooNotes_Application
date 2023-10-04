@@ -30,4 +30,25 @@ export const userAuth = async (req, res, next) => {
   }
 };
 
+export const ForgotAuth = async (req, res, next) => {
+  try {
+    let bearerToken = req.header('Authorization');
+
+    if (!bearerToken)
+      throw {
+        code: HttpStatus.BAD_REQUEST,
+        message: 'Authorization token is required',
+      };
+    bearerToken = bearerToken.split(' ');
+
+    var user = await jwt.verify(bearerToken[1], process.env.Secret_KeyForForgot);
+
+    req.body.email = user.email;
+
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
 
