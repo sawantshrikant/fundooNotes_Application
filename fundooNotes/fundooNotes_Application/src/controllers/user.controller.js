@@ -1,19 +1,18 @@
 import HttpStatus from 'http-status-codes';
 import * as userService from '../services/user.service';
 
-
 export const userRegistration = async (req, res) => {
   try {
     const data = await userService.userRegistration(req.body);
     res.status(HttpStatus.CREATED).json({
       code: HttpStatus.CREATED,
       data: data,
-      message: 'User Registration Details save sucessfully'
+      message: 'User Registration Details saved successfully',
     });
   } catch (error) {
     res.status(HttpStatus.BAD_REQUEST).json({
       code: HttpStatus.BAD_REQUEST,
-      message: error.message
+      message: error.message,
     });
   }
 };
@@ -24,55 +23,49 @@ export const userLogin = async (req, res) => {
     res.status(HttpStatus.ACCEPTED).json({
       code: HttpStatus.ACCEPTED,
       data: data,
-      message: 'User Login sucessful'
+      message: 'User Login successful',
     });
   } catch (error) {
     res.status(HttpStatus.BAD_REQUEST).json({
       code: HttpStatus.BAD_REQUEST,
-      message: error.message
+      message: error.message,
     });
   }
 };
 
-
-
-
-export const forgotPassword = async (req,res) => {
+export const forgotPassword = async (req, res) => {
   try {
-    const email = req.body.email
+    const email = req.body.email;
 
     const data = await userService.forgotPassword(email);
     res.status(HttpStatus.ACCEPTED).json({
       code: HttpStatus.ACCEPTED,
       data: data,
-      message: 'Password reset link send to your email account'
-    });
-    
-  } catch (error) {
-    res.status(HttpStatus.BAD_REQUEST).json({
-      code : HttpStatus.BAD_REQUEST,
-      message : error.message
-    })
-
-    
-    
-  }
-}
-export const resetPassword = async (req, res) => {
-  try {
-    const newPassword  = req.header("newPassword");
-   
-
-    const data = await userService.resetPassword(req.body.email,newPassword);
-    res.status(HttpStatus.ACCEPTED).json({
-      data : data,
-      code: HttpStatus.ACCEPTED,
-      message: 'Password reset successful'
+      message: 'Password reset link sent to your email account',
     });
   } catch (error) {
     res.status(HttpStatus.BAD_REQUEST).json({
       code: HttpStatus.BAD_REQUEST,
-      message: error.message
+      message: error.message,
+    });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  try {
+    const { newPassword } = req.body; // from the request body
+    const { email } = res.locals; // email from res.locals
+
+    const data = await userService.resetPassword(email, newPassword);
+    res.status(HttpStatus.ACCEPTED).json({
+      data: data,
+      code: HttpStatus.ACCEPTED,
+      message: 'Password reset successful',
+    });
+  } catch (error) {
+    res.status(HttpStatus.BAD_REQUEST).json({
+      code: HttpStatus.BAD_REQUEST,
+      message: error.message,
     });
   }
 };
@@ -82,11 +75,24 @@ export const resetPassword = async (req, res) => {
 
 
 
+// export const resetPassword = async (req, res) => { 
+//   try {
+//     const newPassword  = req.header("newPassword");
+   
 
-
-
-
-
+//     const data = await userService.resetPassword(req.body.email,newPassword);
+//     res.status(HttpStatus.ACCEPTED).json({
+//       data : data,
+//       code: HttpStatus.ACCEPTED,
+//       message: 'Password reset successful'
+//     });
+//   } catch (error) {
+//     res.status(HttpStatus.BAD_REQUEST).json({
+//       code: HttpStatus.BAD_REQUEST,
+//       message: error.message
+//     });
+//   }
+// };
 
 
 
