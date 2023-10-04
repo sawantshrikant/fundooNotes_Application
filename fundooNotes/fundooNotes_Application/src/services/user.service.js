@@ -82,7 +82,7 @@ export const forgotPassword = async (email) => {
       throw new Error('User Not Exist');
     }
 
-    resetToken = jwt.sign({ email }, process.env.Secret_Key);
+    resetToken = jwt.sign({ email }, process.env.Secret_KeyForForgot);
 
     await sendEmail(email, `Your reset password token: ${resetToken}`);
   } catch (error) {
