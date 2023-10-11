@@ -52,3 +52,12 @@ export const ForgotAuth = async (req, res, next) => {
 };
 
 
+export const convertFirstName = (req,res,next) => {
+ 
+  if(req.body.firstName){
+    req.body.firstName = req.body.firstName.toLowerCase();
+  }
+  
+  next();
+
+}

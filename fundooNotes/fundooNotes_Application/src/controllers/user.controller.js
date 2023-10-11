@@ -1,21 +1,22 @@
 import HttpStatus from 'http-status-codes';
 import * as userService from '../services/user.service';
 
-export const userRegistration = async (req, res) => {
-  try {
-    const data = await userService.userRegistration(req.body);
-    res.status(HttpStatus.CREATED).json({
-      code: HttpStatus.CREATED,
-      data: data,
-      message: 'User Registration Details saved successfully',
-    });
-  } catch (error) {
-    res.status(HttpStatus.BAD_REQUEST).json({
-      code: HttpStatus.BAD_REQUEST,
-      message: error.message,
-    });
-  }
-};
+
+// export const userRegistration = async (req, res) => {
+//   try {
+//     const data = await userService.userRegistration(req.body);
+//     res.status(HttpStatus.CREATED).json({
+//       code: HttpStatus.CREATED,
+//       data: data,
+//       message: 'User Registration Details saved successfully',
+//     });
+//   } catch (error) {
+//     res.status(HttpStatus.BAD_REQUEST).json({
+//       code: HttpStatus.BAD_REQUEST,
+//       message: error.message,
+//     });
+//   }
+// };
 
 export const userLogin = async (req, res) => {
   try {
@@ -70,6 +71,23 @@ export const resetPassword = async (req, res) => {
   }
 };
 
+
+export const userRegistration = async (req, res) => {
+  console.log(req.body.firstName)
+  try {
+    const data = await userService.userRegistration(req.body);
+    res.status(HttpStatus.CREATED).json({
+      code: HttpStatus.CREATED,
+      data: data,
+      message: 'User Registration Details saved successfully',
+    });
+  } catch (error) {
+    res.status(HttpStatus.BAD_REQUEST).json({
+      code: HttpStatus.BAD_REQUEST,
+      message: error.message,
+    });
+  }
+};
 
 
 
